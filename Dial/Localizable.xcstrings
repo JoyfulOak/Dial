@@ -388,6 +388,17 @@
         }
       }
     },
+    "Controllers/Builtin/MiniVolume: Name" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "MiniVolume"
+          }
+        }
+      }
+    },
     "Controllers/Builtin/Mission: Abstraction" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
@@ -1183,6 +1194,9 @@
         }
       }
     },
+    "Mini Volume Controller" : {
+
+    },
     "MIT License" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1392,6 +1406,9 @@
           }
         }
       }
+    },
+    "Rotate to choose • Press to select" : {
+
     },
     "Rotation type" : {
       "localizations" : {

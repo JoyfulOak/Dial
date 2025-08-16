@@ -25,6 +25,8 @@ enum ControllerID: Codable, Hashable, Defaults.Serializable, Equatable {
         
         case volume
         
+        case scroll2
+        
         var controller: Controller {
             switch self {
             case .main:
@@ -39,6 +41,8 @@ enum ControllerID: Codable, Hashable, Defaults.Serializable, Equatable {
                 MissionController.instance
             case .volume:
                 VolumeController.instance
+            case .scroll2:
+                ScrollController2.instance
             }
         }
         
@@ -54,6 +58,8 @@ enum ControllerID: Codable, Hashable, Defaults.Serializable, Equatable {
     case shortcuts(ShortcutsController.Settings)
     
     case builtin(Builtin)
+    
+    case miniVolume
 }
 
 extension ControllerID {
@@ -64,6 +70,8 @@ extension ControllerID {
                 ShortcutsController(settings: settings)
             case .builtin(let builtin):
                 builtin.controller
+            case .miniVolume:
+                MiniVolumeController.instance
             }
         }
         
@@ -104,6 +112,8 @@ extension ControllerID {
             false
         case .builtin(_):
             true
+        case .miniVolume:
+            false
         }
     }
     
@@ -145,20 +155,31 @@ extension ControllerID: CustomDebugStringConvertible {
             "Shortcuts<\(self)>"
         case .builtin(let builtin):
             "Builtin<\(String(reflecting: builtin))>"
+        case .miniVolume:
+            "MiniVolume"
         }
     }
 }
 
 extension ControllerID: LosslessStringConvertible {
     init?(_ description: String) {
+        if description == "miniVolume" {
+            self = .miniVolume
+            return
+        }
         guard let data = description.data(using: .utf8) else { return nil }
         guard let id = try? JSONDecoder().decode(ControllerID.self, from: data.base64EncodedData()) else { return nil }
         self = id
     }
     
     var description: String {
-        let data = try! JSONEncoder().encode(self)
-        return data.base64EncodedString()
+        switch self {
+        case .miniVolume:
+            return "miniVolume"
+        default:
+            let data = try! JSONEncoder().encode(self)
+            return data.base64EncodedString()
+        }
     }
 }
 

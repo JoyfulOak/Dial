@@ -52,6 +52,11 @@ struct ControllerStateEntryView: View {
                         .font(.caption)
                         .monospaced()
                         .foregroundStyle(.placeholder)
+                case .miniVolume:
+                    Text("Mini Volume Controller")
+                        .font(.caption)
+                        .monospaced()
+                        .foregroundStyle(.placeholder)
                 }
             }
             .lineLimit(1)
@@ -82,6 +87,8 @@ struct ControllerStateEntryView: View {
                     case .shortcuts(let settings):
                         (id.controller as? ShortcutsController)?.settings = settings.new()
                     case .builtin(_):
+                        break
+                    case .miniVolume:
                         break
                     }
                 }
