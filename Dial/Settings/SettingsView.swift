@@ -40,59 +40,39 @@ struct SettingsView: View {
     @State var selectedTab: Tab = .general
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            GeneralSettingsView()
-                .tag(Tab.general)
-                .tabItem {
-                    Tab.general.tabItemView
+        ZStack {
+            Group {
+                TabView(selection: $selectedTab) {
+                    GeneralSettingsView()
+                        .tag(Tab.general)
+                        .tabItem { Tab.general.tabItemView }
+                        .frame(width: 450)
+                        .fixedSize()
+                    DummyView()
+                        .tag(Tab.controllers)
+                        .tabItem { Tab.controllers.tabItemView }
+                    DialMenuSettingsView()
+                        .tag(Tab.dialMenu)
+                        .tabItem { Tab.dialMenu.tabItemView }
+                        .frame(width: 450)
+                    MoreSettingsView()
+                        .tag(Tab.more)
+                        .tabItem { Tab.more.tabItemView }
+                        .frame(width: 450)
+                        .fixedSize()
                 }
-                .frame(width: 450)
-                .fixedSize()
-            
-            DummyView() // This is actually unreachable
-                .tag(Tab.controllers)
-                .tabItem {
-                    Tab.controllers.tabItemView
-                }
-            
-            DialMenuSettingsView()
-                .tag(Tab.dialMenu)
-                .tabItem {
-                    Tab.dialMenu.tabItemView
-                }
-                .frame(width: 450)
-            
-            MoreSettingsView()
-                .tag(Tab.more)
-                .tabItem {
-                    Tab.more.tabItemView
-                }
-                .frame(width: 450)
-                .fixedSize()
-        }
-        .orSomeView(condition: selectedTab == .controllers) {
-            /// Special case for the controllers view's ``NavigationSplitView`` (which is ``TabView`` incompatible)
+                .opacity(selectedTab != .controllers ? 1 : 0)
+                .allowsHitTesting(selectedTab != .controllers)
+            }
             ControllersSettingsView()
-                .frame(minHeight: 450, idealHeight: 600)
-                .toolbar {
-                    ForEach(Tab.allCases) { tab in
-                        Button {
-                            selectedTab = tab
-                        } label: {
-                            tab.tabItemView
-                        }
-                        .disabled(tab == selectedTab)
-                    }
-                }
-                .controlSize(.extraLarge)
-                .navigationTitle("Controllers")
+                .opacity(selectedTab == .controllers ? 1 : 0)
+                .allowsHitTesting(selectedTab == .controllers)
         }
         .task {
             // Tips tasks
 #if DEBUG
             try? Tips.resetDatastore()
 #endif
-            
             try? Tips.configure([
                 .displayFrequency(.immediate),
                 .datastoreLocation(.applicationDefault)

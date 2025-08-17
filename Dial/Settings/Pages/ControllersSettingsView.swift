@@ -31,7 +31,7 @@ struct ControllersSettingsView: View {
         }
         .simultaneousGesture(
             LongPressGesture(minimumDuration: 0.7).onEnded { _ in
-                SelectedControllersWindowController.open(with: [id.wrappedValue])
+                ControllerPicker.open(with: [id.wrappedValue])
             }
         )
     }

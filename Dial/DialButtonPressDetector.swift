@@ -13,10 +13,27 @@ final class DialButtonPressDetector {
             cancelPending()
             let work = DispatchWorkItem { [weak self] in
                 DispatchQueue.main.async {
+                    if MiniControllerPicker.shared.isVisible {
+                        // Confirm current selection
+                        MiniControllerPicker.shared.confirm()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            if let first = Defaults[.activatedControllerIDs].first {
+                                Defaults[.currentControllerID] = first
+                            }
+                            if MiniControllerPicker.shared.isVisible {
+                                MiniControllerPicker.shared.close()
+                            }
+                            ControllerPicker.open(with: Defaults[.activatedControllerIDs])
+                        }
+                        return
+                    }
                     if let first = Defaults[.activatedControllerIDs].first {
                         Defaults[.currentControllerID] = first
                     }
-                    SelectedControllersWindowController.open(with: Defaults[.activatedControllerIDs])
+                    if MiniControllerPicker.shared.isVisible {
+                        MiniControllerPicker.shared.close()
+                    }
+                    ControllerPicker.open(with: Defaults[.activatedControllerIDs])
                 }
                 // mark as "consumed" so release won't treat it as short-press
                 self?.longPressWorkItem = nil
@@ -30,7 +47,7 @@ final class DialButtonPressDetector {
             let wasShortPress = (longPressWorkItem != nil)
             cancelPending()
             if wasShortPress {
-                SelectedControllersWindowController.closeIfOpen()
+                ControllerPicker.closeIfOpen()
             }
         }
 
@@ -39,3 +56,4 @@ final class DialButtonPressDetector {
             longPressWorkItem = nil
         }
     }
+

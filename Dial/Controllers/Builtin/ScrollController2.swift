@@ -15,7 +15,7 @@ final class ScrollController2: BuiltinController {
     static let instance: ScrollController2 = .init()
 
     var id: ControllerID = .builtin(.scroll)
-    var name: String? = "Scroll"
+    var name: String? = "Scroll2"
     var symbol: SFSymbol = .arrowUpArrowDown
 
     var controllerDescription: ControllerDescription = .init(

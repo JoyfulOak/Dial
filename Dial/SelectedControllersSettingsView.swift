@@ -13,20 +13,41 @@ struct SelectedControllersSettingsView: View {
     }
     
     var body: some View {
-        List(controllers, id: \.self) { id in
-            if let onSelect = onControllerSelected {
-                Button {
-                    onSelect(id)
-                } label: {
+        VStack(spacing: 0) {
+            // Header
+            Text("Controllers")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .padding(.top, 14)
+                .padding(.bottom, 6)
+            Divider()
+            // Main: list
+            List(controllers, id: \.self) { id in
+                if let onSelect = onControllerSelected {
+                    Button {
+                        onSelect(id)
+                    } label: {
+                        ControllerStateEntryView(id: .constant(id))
+                    }
+                    .buttonStyle(.plain)
+                } else {
                     ControllerStateEntryView(id: .constant(id))
                 }
-                .buttonStyle(.plain)
-            } else {
-                ControllerStateEntryView(id: .constant(id))
+            }
+            .listStyle(.plain)
+            .frame(minHeight: 180, maxHeight: .infinity)
+            Divider()
+            // Footer: rotate/select message
+            HStack {
+                Spacer()
+                Text("Rotate to choose • Press to select")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .padding(.vertical, 10)
+                Spacer()
             }
         }
-        .navigationTitle("Selected Controllers")
-        .frame(minWidth: 350, minHeight: 400)
+        .frame(minWidth: 350)
     }
 }
 
